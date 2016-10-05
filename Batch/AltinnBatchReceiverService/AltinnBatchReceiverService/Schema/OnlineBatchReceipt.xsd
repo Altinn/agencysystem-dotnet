@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 sp1 (x64) (http://www.altova.com) by Morten Gresby (Bronnoysundregistrene) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="OnlineBatchReceipt">
+		<xs:annotation>
+			<xs:documentation>
+				Denne XSDen beskriver kvitteringen som skal returneres fra et mottakssystem etter å ha
+				mottatt en online forsendelse fra Altinn. Kvitteringen begrenser seg til å kun 
+				beskrive selve mottaket av batchen, og det er ikke lagt opp til at kvitteringen skal 
+				inneholde informasjon vedrørende prosessering av selve batchen.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Result">
+					<xs:annotation>
+						<xs:documentation>
+							Dette elementet har ett attributt resultCode som beskriver status på mottatt 
+							batch. Innholdet i Result-elementet er en valgfri streng. Denne blir ikke 
+							brukt programmatisk, men vil bli lest av driftspersonell i tilfelle feil.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="resultCode" type="resultCodeType"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="resultCodeType">
+		<xs:annotation>
+			<xs:documentation>
+		De forskjellige resultatkodene som kan returneres fra mottaket.
+		OK                  - Batch er mottatt OK.
+		FAILED              - Batch er ikke mottatt, eller det oppstod en feil i mottaket. Altinn
+									  kan forsøke forsendelse på ny.
+		FAILED_DO_NOT_RETRY - Samme som FAILED, men Altinn skal ikke forsøke å sende batch på ny.
+	</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="FAILED"/>
+			<xs:enumeration value="FAILED_DO_NOT_RETRY"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
