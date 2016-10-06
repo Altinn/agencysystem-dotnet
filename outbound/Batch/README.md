@@ -1,4 +1,4 @@
-# Altinn Batch Receiver Sample
+# Altinn Batch Receiver Samples
 
 There are three solutions in this sample:
 * AltinnBatchReceiverService
