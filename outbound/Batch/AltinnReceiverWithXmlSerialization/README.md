@@ -1,8 +1,7 @@
 # A sample implementation of OnlineBatchReceiver
+## ReceiveOnlineBatchExternalAttachment
 
-# ReceiveOnlineBatchExternalAttachment
-
-## AltinnReceiverWithXmlSerialization
+### AltinnReceiverWithXmlSerialization
 A service which receives form requests from Altinn. 
 
 Contains a SoapUI test project with example xml requests.
