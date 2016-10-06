@@ -24,7 +24,9 @@ There is more documentation within the source files.
 
 ## AltinnReceiverWithXmlSerialization
 Another service which receives form requests from Altinn. 
+
 Contains a SoapUI test projsct with example xml requests.
+
 
 * Make sure you have .NET 4.5.2 installed
 * Open the solution in Visual Studio 2015 or later.
