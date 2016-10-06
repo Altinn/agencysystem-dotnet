@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema targetNamespace="http://seres.no/xsd/Kursdomene/LånesøknadJME_M/2011" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns="http://seres.no/xsd/Kursdomene/LånesøknadJME_M/2011" xmlns:seres="http://seres.no/xsd/forvaltningsdata" xmlns:kodebib="http://kodebibliotek.brreg.no/xsd/kodebibliotek" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:import namespace="http://seres.no/xsd/forvaltningsdata" schemaLocation="seres.xsd" />
+	<xsd:import namespace="http://kodebibliotek.brreg.no/xsd/kodebibliotek" schemaLocation="kodebibliotek.xsd" />
+	<xsd:element name="melding" type="LånesøknadJME_M" />
+	<xsd:complexType name="LånesøknadJME_M" seres:elementtype="Meldingsmodell" seres:guid="http://seres.no/guid/Kursdomene/Meldingsmodell/LånesøknadJME_M/474884">
+		<xsd:sequence>
+			<xsd:element name="Innsender" type="Innsender" />
+		</xsd:sequence>
+		<xsd:anyAttribute />
+	</xsd:complexType>
+	<xsd:complexType name="Innsender" seres:elementtype="Meldingsdel" seres:guid="http://seres.no/guid/Kursdomene/Meldingsdel/Innsender/474852">
+		<xsd:sequence>
+			<xsd:element name="søker" type="Søker" seres:guid="http://seres.no/guid/Kursdomene/Relasjonsegenskap/søker/474851" seres:elementtype="Relasjonsegenskap" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Søker" seres:elementtype="Dataobjekttype" seres:guid="http://seres.no/guid/Kursdomene/Dataobjekttype/Søker/474881">
+		<xsd:sequence>
+			<xsd:element name="fødselsnummer" type="Fødselsnummer" seres:guid="http://seres.no/guid/Kursdomene/Dataegenskap/fødselsnummer/474880" seres:elementtype="Dataegenskap" />
+			<xsd:element name="navn" type="Navn" nillable="true" minOccurs="0" seres:guid="http://seres.no/guid/Kursdomene/Dataegenskap/navn/474879" seres:elementtype="Dataegenskap" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="Fødselsnummer" seres:elementtype="Dataenkeltype" seres:guid="http://seres.no/guid/Kursdomene/Dataenkeltype/Fødselsnummer/4009">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="11" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Navn" seres:elementtype="Dataenkeltype" seres:guid="http://seres.no/guid/Kursdomene/Dataenkeltype/Navn/4007">
+		<xsd:restriction base="xsd:string" />
+	</xsd:simpleType>
+</xsd:schema>

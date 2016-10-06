@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="DataBatch">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DataUnits"/>
+				<xs:element minOccurs="0" ref="Attachments"/>
+			</xs:sequence>
+			<xs:attribute name="schemaVersion" type="xs:decimal" use="required"/>
+			<xs:attribute name="batchReference" type="xs:long" use="required"/>
+			<xs:attribute name="previousReference" type="xs:long" use="required"/>
+			<xs:attribute name="receiverReference" type="xs:string" use="required"/>
+			<xs:attribute name="timeStamp" type="xs:dateTime" use="required"/>
+			<xs:attribute name="formTasksInBatch" type="xs:long" use="required"/>
+			<xs:attribute name="formsInBatch" type="xs:long" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataUnits">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="DataUnit"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataUnit">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" name="MetadataList" type="MetadataList" />
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="Approvers">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="unbounded" name="Approver">
+								<xs:complexType>
+									<xs:attribute name="approverId" type="xs:string"/>
+									<xs:attribute name="approvedTimeStamp" type="xs:dateTime"/>
+									<xs:attribute name="securityLevel" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:NMTOKEN">
+												<xs:enumeration value="notSensitive"/>
+												<xs:enumeration value="lessSensitive"/>
+												<xs:enumeration value="sensitive"/>
+												<xs:enumeration value="verySensitive"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>                                                
+				<xs:element minOccurs="0" maxOccurs="1" name="FormTask">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element minOccurs="1" maxOccurs="1" name="ServiceCode" type="xs:string"/>
+							<xs:element minOccurs="1" maxOccurs="1" name="ServiceEditionCode" type="xs:string"/>
+							<xs:element minOccurs="0" maxOccurs="1" name="CaseID" type="xs:int"/>
+							<xs:element name="SOEncryptedSymmetricdKey" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="EncryptedKey" type="xs:base64Binary" minOccurs="1" maxOccurs="1"/>
+										<xs:element name="CertificateThumbprint" type="xs:string" minOccurs="1" maxOccurs="1"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element minOccurs="1" maxOccurs="unbounded" name="Form">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="DataFormatId" type="xs:string"/>
+										<xs:element name="DataFormatVersion" type="xs:string"/>
+										<xs:element name="Reference" type="xs:string"/>
+										<xs:element minOccurs="0" name="ParentReference" type="xs:string"/>
+										<xs:element name="FormData" type="xs:string"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>                                                                                               
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="reportee" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="11"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="archiveReference" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="archiveTimeStamp" type="xs:dateTime" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="MetadataList">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="Metadata" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Metadata">
+		<xs:complexType>
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1" />
+						<xs:maxLength value="255" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="content" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1" />
+						<xs:maxLength value="255" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Attachments">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="Attachment"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Attachment">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:base64Binary">
+					<xs:attribute name="archiveReference" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1"/>
+								<xs:maxLength value="50"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="fileName" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1"/>
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="internalFileName" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1"/>
+								<xs:maxLength value="255"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="attachmentType" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1"/>
+								<xs:maxLength value="50"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="isEncrypted" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:boolean"/>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="checksum" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1" />
+								<xs:maxLength value="255" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="attachmentTypeName" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:minLength value="1" />
+								<xs:maxLength value="255" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
