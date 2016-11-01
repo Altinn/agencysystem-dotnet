@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Web;
-using System.Web.Services;
 using System.IO;
 using System.Configuration;
-using System.Xml.Linq;
-using System.Xml.Schema;
 using System.Diagnostics;
 using AltinnBatchReceiverService.Utils;
 using AltinnBatchReceiverService.Resources;
 using System.Reflection;
-using System.Threading;
 
 namespace AltinnBatchReceiverService
 {
@@ -107,7 +102,7 @@ namespace AltinnBatchReceiverService
             //   The Authenticate method must be implemented by Service owner.
             if (!Authenticate(username, passwd))
             {
-                Logger.Log(string.Format("User not authenticated: {0}", username), true);
+                Logger.Log($"User not authenticated: {username}", true);
                 return BuildResponse(FAILED_DO_NOT_RETRY);
             }
 
@@ -185,14 +180,14 @@ namespace AltinnBatchReceiverService
         /// <summary>
         /// This will verify the Batch data vs. the batch schema.
         /// </summary>
-        /// <param name="batchXML">Batch data (as XML)</param>
+        /// <param name="batchXml">Batch data (as XML)</param>
         /// <returns>True if verified</returns>
         /// <remarks>
         /// It will not be verified if the configuration does not contain any reference to the Schema.
         /// </remarks>
-        private bool VerifyBatchSchema(string batchXML)
+        private bool VerifyBatchSchema(string batchXml)
         {
-            return schFilePath != null ? SchemaValidator.VerifyVsSchema(batchXML, schFilePath) : true;
+            return schFilePath == null || SchemaValidator.VerifyVsSchema(batchXml, schFilePath);
         }
 
         /// <summary>
@@ -216,15 +211,15 @@ namespace AltinnBatchReceiverService
         /// </remarks>
         private int ReceiveMessage(Payload payload)
         {
-            string recref = payload.ReceiverReference != null ? payload.ReceiverReference : "";
-            string filepath = Path.Combine(inboxDirPath, "pl_" + payload.GetHashCode().ToString() + "_" + recref + ".xml");
+            string recref = payload.ReceiverReference ?? "";
+            string filepath = Path.Combine(inboxDirPath, "pl_" + payload.GetHashCode() + "_" + recref + ".xml");
 
             // Here we perform a duplicate check of the file. 
             // If we receive the message before, we inform Altinn of this by returning Failed do not retry.
             // Note that, for this work 100%, a receiverReference (GUID) should be used 
             if (File.Exists(filepath))
             {
-                Logger.Log(string.Format("Duplicate message received {0}", filepath), true, EventLogEntryType.Warning);
+                Logger.Log($"Duplicate message received {filepath}", true, EventLogEntryType.Warning);
                 return 2;
             }
 
@@ -236,7 +231,8 @@ namespace AltinnBatchReceiverService
                     File.WriteAllBytes(attfilepath, payload.Attachments);
                     payload.Attachments = null;
                 }
-                Payload.SerializeAsXml(payload, filepath);
+
+                Payload.SerializeAsXml(payload, filepath);                
             }
             catch (Exception ex)
             {
